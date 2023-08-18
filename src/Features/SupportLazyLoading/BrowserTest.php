@@ -117,8 +117,6 @@ class BrowserTest extends BrowserTestCase
     /** @test */
     public function can_pass_reactive_props_to_lazyilly_loaded_component()
     {
-        // @todo: flaky test
-        $this->markTestSkipped('flaky');
         Livewire::visit([new class extends Component {
             public $count = 1;
             public function inc() { $this->count++; }
@@ -139,10 +137,13 @@ class BrowserTest extends BrowserTestCase
             HTML; }
         }])
         ->waitFor('#child')
+        ->waitForText('Count: 1')
         ->assertSee('Count: 1')
         ->waitForLivewire()->click('@button')
+        ->waitForText('Count: 2')
         ->assertSee('Count: 2')
         ->waitForLivewire()->click('@button')
+        ->waitForText('Count: 3')
         ->assertSee('Count: 3')
         ;
     }
